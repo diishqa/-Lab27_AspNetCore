@@ -76,18 +76,19 @@ var app = builder.Build();
 // });
 
 
-app.MapGet("/", () => "Код ошибки: 401");
-app.MapGet("/secret", () => "aaaa");
+
 app.Use(async (context, next) =>
 {
     var key = context.Request.Query["key"];
     if (key != "secret")
     {
-        app.MapGet("/", () => "bbbb");
+        context.Response.StatusCode = 401;
+        return;
     }
     await next(context);
 });
-
+app.MapGet("/", () => "fff");
+app.MapGet("/secret", () => "aaaa");
 
 
 app.Run();
